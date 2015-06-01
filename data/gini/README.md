@@ -1,4 +1,4 @@
-Data on the Gini coefficient for the UK.
+Data on the income distribution over time for the UK. To calculate Gini coefficient etc.
 
 *Where to get data from?*
 
