@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Crime Graph</title>
+        <script type="text/javascript" src="../lib/d3/d3.min.js"></script>
+       <!-- <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script> -->
+    </head>
+    
+    <style>
+        div.bar {
+            display: inline-block;
+            width: 20px;
+            height: 75px;   /* We'll override height later */
+            background-color: teal;
+        }
+    </style>
+    
+    <body>
+        
+        <h1>XXXX - CRIME GRAPH</h1>
+        <P><STRONG>XXXX So far this is just the chapter 6 example fromt the D3 book I've been
+            reading. Next step is to make an (interactive?) graph of the national crime rate
+            data, then extend it to look at regional changes.</STRONG></P>
+        
+        <p><a href="http://chimera.labs.oreilly.com/books/1230000000345/ch06.html">
+            http://chimera.labs.oreilly.com/books/1230000000345/ch06.html</a></p>
+        
+        <script type="text/javascript">
+
+            var dataset; // Global variable to represent the data
+            // Read the data. This is asynchronous, so all data handling should be done in the
+            // callback function
+            d3.csv("data/student_school.small.csv", 
+                function(error, data) {
+
+                    if (error) {  //If error is not null, something went wrong.
+                        console.log(error);  //Log the error.
+                    } 
+
+                    else {      //If no error, the file loaded correctly. 
+                        dataset = data; // Once loaded, keep a reference to the data
+                        
+                        // CALL OTHER FUNCTIONS HERE THAT WILL REFERENCE THE GLOBAL VARIABLE
+                        drawBars();
+                        
+                        drawCircles();
+                        
+                    } // else
+                    
+                    //console.log("HERE");
+                    //console.log(d3.selectAll("div"))
+
+                } // function
+            ); // d3.csv
+            
+            function drawBars() {
+                
+                //Create SVG element
+                var w = 500, h = 50;
+                var svg = d3.select("body").append("svg").attr("width", w).attr("height", h);
+                // Create rectangles and add them to 'svg'
+                var rects = svg.selectAll("rect").data(dataset).enter().append("rect");
+                rects.attr("x", function(d, i) {
+                    return i * 21;  //Bar width of 20 plus 1 for padding
+                })
+                rects.attr("y", function(d) { 
+                    return h - ( d["Number"] * 5); // Because SVG references objects from upper left
+                })
+                .attr("height", function(d) {
+                    return d["Number"] * 5; 
+                })
+                .attr("fill", function(d) {
+                    return "rgb(0, 0, " + (d["Number"] * 10) + ")";
+                })
+                .attr("width", 20);
+                
+                // Alternatively, using multivalue maps
+                /*
+                svg.selectAll("rect")
+                   .data(dataset)
+                   .enter()
+                   .append("rect")
+                   .attr({
+                        x: function(d, i) { return i * (w / dataset.length); },
+                        y: function(d) { return h - (d * 4); },
+                        width: w / dataset.length - barPadding,
+                        height: function(d) { return d * 4; },
+                        fill: function(d) { return "rgb(0, 0, " + (d * 10) + ")"; }
+                   });
+                */
+                
+                // Add some text (inside the bars)
+                
+                svg.selectAll("text").data(dataset).enter().append("text")
+                    .text(function(d) { return d["Number"]; } )
+                    .attr({
+                        x: function(d,i) { return i * 21; },
+                        y: function(d)   { return h - (d["Number"] * 5) + 10 ; },
+                        fill: "white"
+                    });
+                
+                
+                
+            } // drawBars()
+            
+            function drawCircles() {
+                // Width and height
+                var w = 500;
+                var h = 50;
+                //Create SVG element
+                var svg = d3.select("body")
+                            .append("svg")
+                            .attr("width", w)
+                            .attr("height", h);
+
+                var circles = svg.selectAll("circle")
+                    .data(dataset)
+                    .enter()
+                    .append("circle");
+                circles.attr("fill", "yellow")
+                    .attr("stroke", "orange")
+                    .attr("stroke-width", function(d) {
+                          return d["Number"]/2;
+                      });
+
+                // Set the centre of the circle. Use 'i' to move each circle to the right
+                // (see docs: https://github.com/mbostock/d3/wiki/Selections#attr )
+                circles.attr("cx", function(d, i) {
+                            return (i * 50) + 25;
+                        });
+                // Set the y position
+                circles.attr("cy", h/2);
+                // Set the radius, based on data
+                circles.attr("r", function(d) {
+                            return d["Number"] * 2;
+                       });
+
+                
+            }
+        </script>
+    </body>
+</html>
