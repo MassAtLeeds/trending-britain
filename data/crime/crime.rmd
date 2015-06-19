@@ -1,0 +1,39 @@
+---
+title: "Data on crime in England & Wales"
+author: "Nick Malleson"
+date: '`r format(Sys.time(), "%d %B, %Y (%H:%M)")`'
+output:
+  html_document: default
+fontsize: 11pt
+---
+
+# Data on crime in England & Wales.
+
+## Info 
+
+Drawn fro the Home Office report [Crime in England & Wales (CSEW)](http://www.ons.gov.uk/ons/taxonomy/index.html?nscl=Crime+in+England+and+Wales) (formerly the British Crime Survey). 
+
+In particular, these data are from the [2015 report](http://www.ons.gov.uk/ons/rel/crime-stats/crime-statistics/year-ending-december-2014/crime-in-england-and-wales--year-ending-december-2014.html) that deals with crime up to December 2014. 
+
+Downloaded to [dcp171778_401896.pdf](dcp171778_401896.pdf)
+
+
+## National Crime Over Time
+
+Trends in CSEW crime from 1981 to present available from excel: [www.ons.gov.uk/ons/rel/crime-stats/crime-statistics/year-ending-december-2014/chd-1.xls](www.ons.gov.uk/ons/rel/crime-stats/crime-statistics/year-ending-december-2014/chd-1.xls)
+
+Downloaded and saved to [national_crime_1981-2014.csv](national_crime_1981-2014.csv)
+
+Graph of national crime over time:
+
+```{r national_crime_graph }
+d <- read.csv("national_crime_1981-2014.csv")
+# Take out entries with NA
+d <- d[!is.na(d$CSEWCrime),]
+
+plot(x=d$Year, y=d$CSEWCrime, type='o', xlab="Year", ylab="CSEW Crime")
+
+# Write to pdf
+dev.copy2pdf(file = "national_crime_1981-2014.pdf")
+
+```
