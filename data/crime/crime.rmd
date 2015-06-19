@@ -27,11 +27,19 @@ Downloaded and saved to [national_crime_1981-2014.csv](national_crime_1981-2014.
 Graph of national crime over time:
 
 ```{r national_crime_graph }
-d <- read.csv("national_crime_1981-2014.csv")
-# Take out entries with NA
-d <- d[!is.na(d$CSEWCrime),]
+# Read the crime data and then take out entries with NA (survey didn't happen every year)
+crime <- read.csv("national_crime_1981-2014.csv")
+crime <- d[!is.na(d$CSEWCrime),]
 
-plot(x=d$Year, y=d$CSEWCrime, type='o', xlab="Year", ylab="CSEW Crime")
+# Find out who was in government in each year
+govt <- read.csv("../party_summary-1945-2015.csv")
+
+# Now plot the government on the x axis, represented by a coloured line
+
+XXXX
+
+
+plot(x=crime$Year, y=crime$CSEWCrime, type='o', xlab="Year", ylab="CSEW Crime")
 
 # Write to pdf
 dev.copy2pdf(file = "national_crime_1981-2014.pdf")
