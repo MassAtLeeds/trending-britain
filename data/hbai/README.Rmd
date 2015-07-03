@@ -1,22 +1,54 @@
 ---
-title: "HBAI"
+title: "Households below average income (HBAI) statistics"
 author: "NIck Malleson"
 date: "3 July 2015"
 output: html_document
 ---
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r init}
+library(ggplot2) 
+library(reshape2) # For manipulating data ready for ggplot2 (in particular need 'melt')
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+```
+
+# Introduction
+
+A measure commonly used to quantify rates of relative poverty.
+
+"Statistics on the number and percentage of people living in low-income households in the UK." [https://www.gov.uk/government/collections/households-below-average-income-hbai--2](https://www.gov.uk/government/collections/households-below-average-income-hbai--2)
+
+
+# Definitions:
+
+  - **BHC**: Before Housing Costs
+  - **AHC**: After Housing Costs 
+  - **Relative** low income: the proportion of individuals who have household incomes below 60% of the median in the given year.
+  - **Absolute** low income: as above, but using the average in 2010/11 (adjusted for inflation) which allows for comparisons over time.
+  
+# Trends
+
+Trends in HBAI from 1994/95 available from the [Home Office](https://www.gov.uk/government/statistics/households-below-average-income-19941995-to-20132014). In particular, see the [documentation](https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/437246/households-below-average-income-1994-95-to-2013-14.pdf) and the [Supporting Trend Data (CSV files)](https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/437256/hba-2013-2014-supporting-csv-files.zip). The data show trends broken down in a number of different ways.
+
+## Absolute low income (below 60% of median in 2010/11)
 
 ```{r}
-summary(cars)
+# Read the trends data
+d <- read.csv('./hba-2013-2014-supporting-csv-files/Chapter 3 - Trends.csv')
+
+# Just take the columns that we want
+d <- d[, c("Year","X60ABSBHCP_ALL","X60ABSAHCP_ALL")]
+
+# Make it long for ggplot2 (all variables in the same column with a separate identifier column)
+d.long <- melt(d, id.vars="Year", value.name = "Percent")
+
+ggplot(data=d.long, aes(x=Year, y=Percent, group=1)) + 
+  geom_line(color="red", linetype="dotted") +
+  geom_point(color="red") +
+  xlab("Year") + ylab("Percentage") + ggtitle("Percentage of individuals in absolute low income")
+
 ```
 
-You can also embed plots, for example:
+XXXX - HERE - Fix the graph above and explain what it's showing. Definition of variables:
 
-```{r, echo=FALSE}
-plot(cars)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+60ABSBHCP_ALL	Percentage of individuals in absolute low income - BHC
+60ABSAHCP_ALL	Percentage of individuals in absolute low income - AHC
