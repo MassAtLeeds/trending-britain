@@ -72,3 +72,9 @@ What data we want, where we might be able to get it from, whether we have everyt
 
 </table>
 -->
+
+## Notes/ Resources
+
+[Flowing data](http://projects.flowingdata.com/) has lots of excellent visualisations about national trends. E.g. the following [graph](http://projects.flowingdata.com/atlas/government/receipts-expenditures-and-debt/) on debt and spending in the U.S.
+
+<a href="http://projects.flowingdata.com/atlas/government/receipts-expenditures-and-debt/"><img src="http://i2.wp.com/projects.flowingdata.com/atlas/wp-content/uploads/2015/07/fiscal-chart1.png?resize=2200%2C2167"/></a>
